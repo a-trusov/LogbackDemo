@@ -1,0 +1,105 @@
+<configuration>
+    <appender name="FILE-WARN-EXCEPTION"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+        </filter>
+
+        <file>FILE-WARN-EXCEPTION.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>FILE-WARN-EXCEPTION.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="FILE-DEBUG-INFO-SERVICE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+        </filter>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+        </filter>
+
+        <file>FILE-DEBUG-INFO-SERVICE.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>FILE-DEBUG-INFO-SERVICE.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="FILE-ALL"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>FILE-ALL.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>FILE-ALL.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!--    Все дебаг и инфо сообщения из сервисов(service) поместить в отдельный файл-->
+    <logger name="ru.papont.service" additivity="false">
+        <appender-ref ref="FILE-DEBUG-INFO-SERVICE"/>
+    </logger>
+
+    <!--    Все дебаг и инфо сообщения из контроллеров(rest) поместить в отдельный файл-->
+    <logger name="ru.papont.rest" additivity="false">
+        <appender-ref ref="FILE-DEBUG-INFO-REST"/>
+    </logger>
+
+    <!--    Все исключения и ворнинги выводить в отдельный файл-->
+    <!--    <logger name="ru.papont" level="warn" additivity="false">-->
+    <!--        <appender-ref ref="FILE-WARN-EXCEPTION"/>-->
+    <!--    </logger>-->
+
+    <!--    Все остальное выводить в отдельный файл-->
+    <root level="trace">
+        <appender-ref ref="FILE-ALL"/>
+    </root>
+
+    <!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+    <!--        <encoder>-->
+    <!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+
+    <!--    <root level="warn">-->
+    <!--        <appender-ref ref="STDOUT" />-->
+    <!--    </root>-->
+</configuration>
