@@ -1,10 +1,9 @@
 <configuration>
-    <appender name="FILE-WARN-EXCEPTION"
+    <appender name="FILE-WARN-ERROR"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>warn</level>
-            <onMatch>ACCEPT</onMatch>
+        <filter class="ru.papont.filter.CustomFilter">
+            <levels>warn|error</levels>
         </filter>
 
         <file>FILE-WARN-EXCEPTION.log</file>
@@ -27,14 +26,8 @@
     <appender name="FILE-DEBUG-INFO-SERVICE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>DEBUG</level>
-            <onMatch>ACCEPT</onMatch>
-        </filter>
-
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
+        <filter class="ru.papont.filter.CustomFilter">
+            <levels>debug|info</levels>
         </filter>
 
         <file>FILE-DEBUG-INFO-SERVICE.log</file>
@@ -54,9 +47,13 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="FILE-ALL"
+    <appender name="FILE-OTHER"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>FILE-ALL.log</file>
+        <filter class="ru.papont.filter.CustomFilter">
+            <levels>trace|degug|info</levels>
+        </filter>
+
+        <file>FILE-OTHER.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} - %msg%n
@@ -65,7 +62,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>FILE-ALL.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>FILE-OTHER.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>10MB</maxFileSize>
@@ -74,23 +71,18 @@
     </appender>
 
     <!--    Все дебаг и инфо сообщения из сервисов(service) поместить в отдельный файл-->
-    <logger name="ru.papont.service" additivity="false">
+    <logger name="ru.papont.service">
         <appender-ref ref="FILE-DEBUG-INFO-SERVICE"/>
     </logger>
 
-    <!--    Все дебаг и инфо сообщения из контроллеров(rest) поместить в отдельный файл-->
-    <logger name="ru.papont.rest" additivity="false">
-        <appender-ref ref="FILE-DEBUG-INFO-REST"/>
-    </logger>
-
     <!--    Все исключения и ворнинги выводить в отдельный файл-->
-    <!--    <logger name="ru.papont" level="warn" additivity="false">-->
-    <!--        <appender-ref ref="FILE-WARN-EXCEPTION"/>-->
-    <!--    </logger>-->
+    <logger name="ru.papont">
+        <appender-ref ref="FILE-WARN-ERROR"/>
+    </logger>
 
     <!--    Все остальное выводить в отдельный файл-->
     <root level="trace">
-        <appender-ref ref="FILE-ALL"/>
+        <appender-ref ref="FILE-OTHER"/>
     </root>
 
     <!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
